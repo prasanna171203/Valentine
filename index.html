@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Us ❤️</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      text-align: center;
+      color: white;
+
+      background: linear-gradient(135deg, #ff6b81, #ff9aa2, #ffc1cc);
+    }
+
+    h1, h2 {
+      text-shadow: 0 3px 8px rgba(0,0,0,0.6);
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      width: 90%;
+      max-width: 340px;
+      z-index: 2;
+    }
+
+    .buttons {
+      position: relative;
+      height: 90px;
+      margin-top: 15px;
+    }
+
+    button {
+      width: 110px;
+      height: 45px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      position: absolute;
+    }
+
+    .yes {
+      left: 20px;
+      background: white;
+      color: #ff4d6d;
+      font-weight: bold;
+    }
+
+    .no {
+      right: 20px;
+      background: #ff4d6d;
+      color: white;
+      transition: transform 0.2s ease;
+    }
+
+    /* 💌 POPUP */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 85%;
+      max-width: 320px;
+      padding: 30px 25px 25px;
+      border-radius: 20px;
+
+      background: linear-gradient(135deg, #ff4d6d, #ff9aa2);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+
+      line-height: 1.6;
+      opacity: 0;
+      transition: 0.3s ease;
+      z-index: 5;
+
+      position: fixed;
+    }
+
+    .popup.show {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+
+    /* ✨ X close button */
+    .closeX {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: white;
+    }
+
+    .closeX:hover {
+      transform: scale(1.2);
+    }
+
+    /* 💕 hearts */
+    .heart {
+      position: fixed;
+      top: -20px;
+      font-size: 22px;
+      animation: fall linear forwards;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    /* 🎉 confetti */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      top: 0;
+      animation: confall linear forwards;
+      z-index: 1;
+    }
+
+    @keyframes confall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <audio id="music" src="music.mp3" loop></audio>
+
+  <div class="card">
+    <h1>Venkat ❤️ Lakshmi</h1>
+    <h2>Will you be my Valentine?</h2>
+
+    <div class="buttons">
+      <button class="yes" onclick="sayYes()">Yes 💕</button>
+      <button class="no" id="noBtn">No 🙈</button>
+    </div>
+  </div>
+
+  <div id="popup" class="popup" onclick="closePopup()"></div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const popup = document.getElementById("popup");
+    const music = document.getElementById("music");
+
+    let attempts = 0;
+
+    noBtn.addEventListener("touchstart", handleNo);
+    noBtn.addEventListener("mouseover", handleNo);
+
+    function handleNo() {
+      if (attempts < 4) {
+        const x = Math.random() * 150 - 75;
+        const y = Math.random() * 40 - 20;
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+        attempts++;
+      } else {
+        showPopup("❌ Invalid choice 😤❤️<br>You can only pick YES hehe 💕");
+      }
+    }
+
+    function sayYes() {
+      showPopup(`
+        <b>Hey babeee! 💕</b><br><br>
+        There's nothing called Valentine's Day for us…<br>
+        because all 365 days revolve around you ❤️<br><br>
+        Every second, minute and day I love you more 🥺✨<br><br>
+        You're my safe place, my happiness, my everything 💖<br><br>
+        <b>Forever yours. Always. 💍💕</b>
+      `);
+
+      if (music) music.play();
+      startHearts();
+      startConfetti();
+    }
+
+    function showPopup(text) {
+      popup.innerHTML = `
+        <button class="closeX" onclick="closePopup(); event.stopPropagation();">✕</button>
+        ${text}
+      `;
+      popup.classList.add("show");
+    }
+
+    function closePopup() {
+      popup.classList.remove("show");
+    }
+
+    function startHearts() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }, 300);
+    }
+
+    function startConfetti() {
+      for (let i = 0; i < 80; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.background =
+          ["#fff","#ff4d6d","#ffc1cc","#ff9aa2"][Math.floor(Math.random()*4)];
+        c.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
+      }
+    }
+  </script>
+
+</body>
+</html>
